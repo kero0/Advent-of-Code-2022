@@ -1,0 +1,60 @@
+#+title: Readme
+#+author: Kirols Bakheat
+
+* Part 1
+** Problem
+1. Take a list of integers seperated by newlines, each list is seperated by a newline
+2. Find the sum of the integers in each list
+3. Print the maximum of the sums
+
+** Solution
+#+BEGIN_SRC haskell :tangle Part1.hs
+import Data.List.Split (splitOn)
+
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  let ints = map (sum . map read . lines) $ splitOn "\n\n" txt :: [Int]
+  print $ maximum ints
+#+END_SRC
+
+** Results
+#+begin_src shell
+runghc Part1.hs
+#+end_src
+
+* Part 2
+** Problem
+1. Take a list of integers seperated by newlines, each list is seperated by a newline
+2. Find the sum of the integers in each list
+3. Print the sum of the 3 largest sums
+
+** Solution
+#+BEGIN_SRC haskell :tangle Part2.hs
+import Data.List (sort)
+import Data.List.Split (splitOn)
+
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  let ints = map (sum . map read . lines) $ splitOn "\n\n" txt :: [Int]
+  print $ sum $ maxThree ints
+
+maxThree :: [Int] -> [Int]
+maxThree [a, b, c] = [a, b, c]
+maxThree (a : b : c : xs) = s $ f a b c xs
+  where
+    s (a, b, c) = [a, b, c]
+    f a b c [] = (a, b, c)
+    f a b c (x : xs)
+      | x > a = f x a b xs
+      | x > b = f a x b xs
+      | x > c = f a b x xs
+      | otherwise = f a b c xs
+#+END_SRC
+
+** Results
+#+BEGIN_SRC shell :async no
+runghc Part2.hs
+#+END_SRC
+
