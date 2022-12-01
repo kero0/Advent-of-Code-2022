@@ -10,12 +10,13 @@
           haskell = (pkgs.haskellPackages.ghcWithPackages
             (ps: with ps; [ haskell-language-server hlint stylish-haskell ]));
         in {
-          devShell.${system} = pkgs.mkShell {
+          ${system}.default = pkgs.mkShell {
             buildInputs = [ haskell ];
             shellHook = ''
               eval $(egrep ^export ${haskell}/bin/ghc)
             '';
           };
         };
-    in nixpkgs.lib.foldr nixpkgs.lib.mergeAttrs { } (map f supportedSystems);
+      val = nixpkgs.lib.foldr nixpkgs.lib.mergeAttrs { } (map f supportedSystems);
+    in { devShells = val; };
 }
