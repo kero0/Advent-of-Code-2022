@@ -1,0 +1,103 @@
+#+title: Readme
+#+author: Kirols Bakheat
+
+* Part 1
+** Problem
+1. Take a list of pairs of characters. List is separated by newlines, pairs are separated by spaces.
+2. Each pair represents what your opponent plays then what you play.
+3. Score according to these tables
+   | Your Play | Score |
+   | X         |     1 |
+   | Y         |     2 |
+   | Z         |     3 |
+
+   | Outcome | Score |
+   | Lose    |     0 |
+   | Tie     |     3 |
+   | Win     |     6 |
+
+** Solution
+#+BEGIN_SRC haskell :tangle Part1.hs
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  let ints = map ((\x -> rockPaperScissorsScore x + playScore x) . map head . words) $ lines txt
+  print $ sum ints
+  where
+    r = read :: String -> Int
+
+rockPaperScissorsScore :: String -> Int
+rockPaperScissorsScore s
+  | s == "AZ" || s == "BX" || s == "CY" = 0
+  | s == "AY" || s == "BZ" || s == "CX" = 6
+  | otherwise = 3
+
+playScore :: String -> Int
+playScore (_ : s : []) =
+  case s of
+    'X' -> 1
+    'Y' -> 2
+    'Z' -> 3
+    _ -> 0
+#+END_SRC
+
+** Results
+#+begin_src shell
+runghc Part1.hs
+#+end_src
+
+* Part 2
+** Problem
+1. Take a list of pairs of characters. List is separated by newlines, pairs are separated by spaces.
+2. Each pair represents what your opponent plays then whether you need to lose, tie, or win.
+3. Find out what you're supposed to play.
+4. Score according to these tables
+   | Your Play | Score |
+   | X         |     1 |
+   | Y         |     2 |
+   | Z         |     3 |
+
+   | Outcome | Score |
+   | Lose    |     0 |
+   | Tie     |     3 |
+   | Win     |     6 |
+** Solution
+#+BEGIN_SRC haskell :tangle Part2.hs
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  let ints = map ((\x -> rockPaperScissorsScore x + playScore x) . map head . words) $ lines txt
+  print $ sum ints
+  where
+    r = read :: String -> Int
+
+rockPaperScissorsScore :: String -> Int
+rockPaperScissorsScore [_, s] = case s of
+  'X' -> 0
+  'Y' -> 3
+  'Z' -> 6
+  _ -> error "Invalid input"
+rockPaperScissorsScore _ = error "Invalid input"
+
+playScore ::
+  String ->
+  Int
+playScore [s, s'] =
+  case (s, s') of
+    ('A', 'X') -> 3
+    ('A', 'Y') -> 1
+    ('A', 'Z') -> 2
+    ('B', 'X') -> 1
+    ('B', 'Y') -> 2
+    ('B', 'Z') -> 3
+    ('C', 'X') -> 2
+    ('C', 'Y') -> 3
+    ('C', 'Z') -> 1
+    _ -> error "Invalid input"
+playScore _ = error "Invalid input"
+#+END_SRC
+
+** Results
+#+BEGIN_SRC shell :async no
+runghc Part2.hs
+#+END_SRC

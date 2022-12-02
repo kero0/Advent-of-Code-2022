@@ -3,7 +3,7 @@
 
 * Part 1
 ** Problem
-1. Take a list of integers seperated by newlines, each list is seperated by a newline
+1. Take a list of integers separated by newlines, each list is separated by a newline
 2. Find the sum of the integers in each list
 3. Print the maximum of the sums
 
@@ -25,7 +25,7 @@ runghc Part1.hs
 
 * Part 2
 ** Problem
-1. Take a list of integers seperated by newlines, each list is seperated by a newline
+1. Take a list of integers separated by newlines, each list is separated by a newline
 2. Find the sum of the integers in each list
 3. Print the sum of the 3 largest sums
 
@@ -57,4 +57,3 @@ maxThree (a : b : c : xs) = s $ f a b c xs
 #+BEGIN_SRC shell :async no
 runghc Part2.hs
 #+END_SRC
-

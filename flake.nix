@@ -17,6 +17,8 @@
             '';
           };
         };
-      val = nixpkgs.lib.foldr nixpkgs.lib.mergeAttrs { } (map f supportedSystems);
-    in { devShells = val; };
+    in {
+      devShells =
+        nixpkgs.lib.foldr nixpkgs.lib.mergeAttrs { } (map f supportedSystems);
+    };
 }
