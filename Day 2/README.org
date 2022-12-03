@@ -1,4 +1,4 @@
-#+title: Readme
+#+title: AoC 2022 - Day 2
 #+author: Kirols Bakheat
 
 * Part 1
