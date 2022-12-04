@@ -1,5 +1,6 @@
 #+title: AoC 2022 - Day 2
 #+author: Kirols Bakheat
+#+PROPERTY: header-args:sh :cache no
 
 * Part 1
 ** Problem
@@ -42,9 +43,12 @@ playScore (_ : s : []) =
 #+END_SRC
 
 ** Results
-#+begin_src shell
+#+begin_src sh
 runghc Part1.hs
 #+end_src
+
+#+RESULTS[406ed1456dbcf7f3375dcd08d06b822b5b7d078b]:
+: 11666
 
 * Part 2
 ** Problem
@@ -98,6 +102,9 @@ playScore _ = error "Invalid input"
 #+END_SRC
 
 ** Results
-#+BEGIN_SRC shell :async no
+#+BEGIN_SRC sh
 runghc Part2.hs
 #+END_SRC
+
+#+RESULTS[a8401b6fa106d729cfb9f901c651aae2ec295828]:
+: 12767

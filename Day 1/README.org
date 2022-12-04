@@ -1,5 +1,6 @@
 #+title: AoC 2022 - Day 1
 #+author: Kirols Bakheat
+#+PROPERTY: header-args:sh :cache no
 
 * Part 1
 ** Problem
@@ -19,9 +20,12 @@ main = do
 #+END_SRC
 
 ** Results
-#+begin_src shell
+#+begin_src sh
 runghc Part1.hs
 #+end_src
+
+#+RESULTS[406ed1456dbcf7f3375dcd08d06b822b5b7d078b]:
+: 72602
 
 * Part 2
 ** Problem
@@ -31,7 +35,6 @@ runghc Part1.hs
 
 ** Solution
 #+BEGIN_SRC haskell :tangle Part2.hs
-import Data.List (sort)
 import Data.List.Split (splitOn)
 
 main :: IO ()
@@ -54,6 +57,9 @@ maxThree (a : b : c : xs) = s $ f a b c xs
 #+END_SRC
 
 ** Results
-#+BEGIN_SRC shell :async no
+#+BEGIN_SRC sh
 runghc Part2.hs
 #+END_SRC
+
+#+RESULTS[a8401b6fa106d729cfb9f901c651aae2ec295828]:
+: 207410
