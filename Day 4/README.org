@@ -1,0 +1,60 @@
+#+title: AoC 2022 - Day 4
+#+author: Kirols Bakheat
+#+PROPERTY: header-args:sh :cache no
+
+* Part 1
+** Problem
+1. Take a list of pairs of int ranges, with the pairs separated by a comma and the ranges separated by a dash.
+2. Find all pairs where one range is a subset of the other.
+3. Count the number of pairs that satisfy the condition.
+
+** Solution
+#+BEGIN_SRC haskell :tangle Part1.hs
+import Data.List.Extra (splitOn)
+
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  print $
+    length $
+      filter (\[[a, b], [c, d]] -> a >= c && b <= d || c >= a && d <= b) $
+        map (map (map read . splitOn "-" :: String -> [Int]) . splitOn ",") $
+          lines txt
+#+END_SRC
+
+** Results
+#+begin_src sh
+runghc Part1.hs
+#+end_src
+
+#+RESULTS[406ed1456dbcf7f3375dcd08d06b822b5b7d078b]:
+: 573
+
+* Part 2
+** Problem
+1. Take a list of pairs of int ranges, with the pairs separated by a comma and the ranges separated by a dash.
+2. Find all pairs where the ranges overlap.
+3. Count the number of pairs that satisfy the condition.
+
+** Solution
+#+name: part2
+#+BEGIN_SRC haskell :tangle Part2.hs
+import Data.List.Extra (splitOn)
+
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  print $
+    length $
+      filter (\[[a, b], [c, d]] -> a >= c && a <= d || c >= a && c <= b) $
+        map (map (map read . splitOn "-" :: String -> [Int]) . splitOn ",") $
+          lines txt
+#+END_SRC
+
+** Results
+#+BEGIN_SRC sh
+runghc Part2.hs
+#+END_SRC
+
+#+RESULTS[a8401b6fa106d729cfb9f901c651aae2ec295828]:
+: 867
