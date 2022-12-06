@@ -1,0 +1,111 @@
+#+title: AoC 2022 - Day 5
+#+author: Kirols Bakheat
+#+PROPERTY: header-args:sh :cache no
+
+* Part 1
+** Problem
+1. Read a list of stacks of chars, each car is wrapped in '[]' and seperated by '  '.
+2. Read a list of commands, each in the format 'move x from i to j', where x is the number of chars to move, i is the index of the stack to move from, and j is the index of the stack to move to.
+   1. The crane can only move one item at a time, so the part that is moved is always reversed.
+3. Execute all the commands in order.
+4. Return the top of each stack.
+
+** Solution
+#+BEGIN_SRC haskell :tangle Part1.hs
+import Data.Bifunctor (bimap)
+import Data.List.Split (chunksOf)
+import Data.Maybe (fromJust, isNothing)
+import Data.Text (Text, pack, strip, unpack)
+import Data.List (transpose)
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  print
+    $ map head
+    $ uncurry doMoves
+    $ bimap
+      ( map (map fromJust . dropWhile isNothing)
+          . transpose
+          . map (map (toletter . unpack . strip . pack) . chunksOf 4)
+          . init
+      )
+      (map ((\[_, num, _, from, _, to] -> (read num, read from - 1, read to - 1) :: (Int, Int, Int)) . words) . tail)
+    $ break (== "")
+    $ lines txt
+  where
+    toletter [_, c, _] = Just c
+    toletter _ = Nothing
+
+doMoves :: [String] -> [(Int, Int, Int)] -> [String]
+doMoves state [] = state
+doMoves state ((num, from, to) : rest) =
+  flip doMoves rest $
+    setAt from (drop num $ state !! from) $
+      setAt to (reverse (take num (state !! from)) ++ state !! to) state
+
+setAt :: Int -> a -> [a] -> [a]
+setAt i x xs = take i xs ++ [x] ++ drop (i + 1) xs
+#+END_SRC
+
+** Results
+#+begin_src sh
+runghc Part1.hs
+#+end_src
+
+#+RESULTS[406ed1456dbcf7f3375dcd08d06b822b5b7d078b]:
+: CWMTGHBDW
+
+* Part 2
+** Problem
+1. Read a list of stacks of chars, each car is wrapped in '[]' and seperated by '  '.
+2. Read a list of commands, each in the format 'move x from i to j', where x is the number of chars to move, i is the index of the stack to move from, and j is the index of the stack to move to.
+   1. The crane can move any number of items at a time, so the part that is moved is not reversed.
+3. Execute all the commands in order.
+4. Return the top of each stack.
+
+** Solution
+Beacuse these two are so similar, these two code blocks are the same, except for the =setAt= line which no longer reverses the part of the list added on.
+#+name: part2
+#+BEGIN_SRC haskell :tangle Part2.hs
+import Data.Bifunctor (bimap)
+import Data.List.Split (chunksOf)
+import Data.Maybe (fromJust, isNothing)
+import Data.Text (Text, pack, strip, unpack)
+
+main :: IO ()
+main = do
+  txt <- readFile "data.txt"
+  print
+    $ map head
+    $ uncurry doMoves
+    $ bimap
+      ( map (map fromJust . dropWhile isNothing)
+          . rotate
+          . map (map (toletter . unpack . strip . pack) . chunksOf 4)
+          . init
+      )
+      (map ((\[_, num, _, from, _, to] -> (read num, read from - 1, read to - 1) :: (Int, Int, Int)) . words) . tail)
+    $ break (== "")
+    $ lines txt
+  where
+    toletter [_, c, _] = Just c
+    toletter _ = Nothing
+
+doMoves :: [String] -> [(Int, Int, Int)] -> [String]
+doMoves state [] = state
+doMoves state ((num, from, to) : rest) =
+  flip doMoves rest $
+    setAt from (drop num $ state !! from) $
+      setAt to (take num (state !! from) ++ state !! to) state
+
+setAt :: Int -> a -> [a] -> [a]
+setAt i x xs = take i xs ++ [x] ++ drop (i + 1) xs
+#+END_SRC
+
+** Results
+#+BEGIN_SRC sh
+runghc Part2.hs
+#+END_SRC
+
+#+RESULTS[a8401b6fa106d729cfb9f901c651aae2ec295828]:
+: SSCGWJCRB
